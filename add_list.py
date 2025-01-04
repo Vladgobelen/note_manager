@@ -1,10 +1,22 @@
 import datetime
 
+# functions
+
+
+def add_titles(number):  # Adding three headers
+    for i in range(1, number+1):
+        title.append(input(f'Заголовок заметки номер {i}: '))
+
+
+def read_titles(number):  # Reading three headers
+    for i in range(1, number+1):  # headers output
+        print(f'Заголовок заметки номер {i}: {title[i-1]}')
+
+
 # variables
 username = input('Имя пользователя: ')
 title = []
-for i in range(1, 4):  # Adding three headers
-    title.append(input(f'Заголовок заметки номер {i}: '))
+add_titles(3)
 content = input('Описание заметки: ')
 status = input('Статус заметки: ')
 created_date = datetime.datetime.now().strftime('%d-%m-%Y')
@@ -12,8 +24,7 @@ issue_date = input('Дата истечения заметки (день-мес�
 
 # working
 print('\nИмя пользователя:', username)
-for i in range(1, 4):  # headers output
-    print(f'Заголовок заметки номер {i}: {title[i-1]}')
+read_titles(3)
 print('Описание заметки:', content)
 print('Статус заметки:', status)
 print(created_date)
