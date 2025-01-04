@@ -6,7 +6,7 @@ title = input('Заголовок заметки: ')
 content = input('Описание заметки: ')
 status = input('Статус заметки: ')
 created_date = datetime.datetime.now().strftime('%d-%m-%Y')
-issue_date = input('Дата истечения заметки (день-год-месяц): ')
+issue_date = input('Дата истечения заметки (день-месяц-год): ')
 
 # working
 print('Имя пользователя:', username)
