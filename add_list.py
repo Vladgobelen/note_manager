@@ -8,8 +8,8 @@ def add_titles(number):  # Adding three headers
         title.append(input(f'Заголовок заметки номер {i}: '))
 
 
-def read_titles(number):  # Reading three headers
-    for i in range(1, number+1):  # headers output
+def read_titles():  # Reading three headers
+    for i in range(1, len(title)+1):  # headers output
         print(f'Заголовок заметки номер {i}: {title[i-1]}')
 
 
@@ -24,7 +24,7 @@ issue_date = input('Дата истечения заметки (день-мес�
 
 # working
 print('\nИмя пользователя:', username)
-read_titles(3)
+read_titles()
 print('Описание заметки:', content)
 print('Статус заметки:', status)
 print(created_date)
