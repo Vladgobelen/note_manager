@@ -1,12 +1,10 @@
-import datetime
-
 # variables
 username = input('Имя пользователя: ')
 title = input('Заголовок заметки: ')
 content = input('Описание заметки: ')
 status = input('Статус заметки: ')
-created_date = datetime.datetime.now().strftime('%d-%m-%Y')
-issue_date = input('Дата истечения заметки (день-месяц-год): ')
+created_date = input('Дата создания заметки(дд-мм-гггг): ')
+issue_date = input('Дата истечения заметки (дд-мм-гггг): ')
 
 # working
 print('Имя пользователя:', username)
