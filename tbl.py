@@ -31,11 +31,11 @@ note = {
         }
 # working
 print("Введите следущие данные: \n")
-for key, value in note.items():
+for key in note:
     for i in range(0, len(note[key]["comment"])):
         note[key]['var'].append(input(f'{note[key]["comment"][i]}: '))
 
 print("\n")
-for key, value in note.items():
+for key in note:
     for i in range(0, len(note[key]["comment"])):
         print(f'{note[key]["comment"][i]}: ', note[key]["var"][i])
