@@ -8,17 +8,17 @@ note = {
         'issue_date': '',
         }
 title = []
-note['username'] = input('Имя пользователя: ')
-note['title'].append(input('Заголовок заметки 1: '))
-note['title'].append(input('Заголовок заметки 2: '))
-note['title'].append(input('Заголовок заметки 3: '))
-note['content'] = input('Описание заметки: ')
-note['status'] = input('Статус заметки: ')
-note['created_date'] = input('Дата создания заметки(дд-мм-гггг): ')
-note['issue_date'] = input('Дата истечения заметки (дд-мм-гггг): ')
+note['username'] = input('Введите имя пользователя: ')
+note['title'].append(input('Введите заголовок заметки 1: '))
+note['title'].append(input('Введите заголовок заметки 2: '))
+note['title'].append(input('Введите заголовок заметки 3: '))
+note['content'] = input('Введите описание заметки: ')
+note['status'] = input('Введите статус заметки: ')
+note['created_date'] = input('Введите дату создания заметки(дд-мм-гггг): ')
+note['issue_date'] = input('Введите дату истечения заметки (дд-мм-гггг): ')
 
 # working
-print('\nИмя пользователя:', note['username'])
+print('\n Имя пользователя:', note['username'])
 print('Заголовок заметки 1:', note['title'][0])
 print('Заголовок заметки 2:', note['title'][1])
 print('Заголовок заметки 3:', note['title'][2])
