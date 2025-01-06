@@ -32,8 +32,8 @@ note = {
 # working
 print("Введите следущие данные: \n")
 for key in note:
-    for i in range(0, len(note[key]["comment"])):
-        note[key]['var'].append(input(f'{note[key]["comment"][i]}: '))
+    for comment in note[key]["comment"]:
+        note[key]['var'].append(input(f'{comment}: '))
 
 print("\n")
 for key in note:
