@@ -1,4 +1,4 @@
-# variables
+# vars
 note = {
         'username': {
                     "var": [],
