@@ -31,6 +31,7 @@ for key in note:
     while True:
         temp_text = input(f'{note[key]['comment'][0]}: ')
         if temp_text == "":
+            note[key]['var'] = list(set(note[key]['var']))
             break
         else:
             note[key]['var'].append(temp_text)
