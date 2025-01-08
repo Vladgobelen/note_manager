@@ -7,7 +7,6 @@ note = {
         'created_date': '',
         'issue_date': '',
         }
-title = []
 note['username'] = input('Введите имя пользователя: ')
 note['title'].append(input('Введите заголовок заметки 1: '))
 note['title'].append(input('Введите заголовок заметки 2: '))
