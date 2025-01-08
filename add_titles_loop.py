@@ -41,6 +41,12 @@ for key in note:
     for var in note[key]["var"]:
         if key == "created_date" or key == "issue_date":
             value = "-".join(var.split(sep="-")[:2])
-            print(f'{note[key]["comment"][0]}: ', value)
+            try:
+                print(f'{note[key]["comment"][0]}: ', value)
+            except Exception as e:
+                print(e)
         else:
-            print(f'{note[key]["comment"][0]}: ', var)
+            try:
+                print(f'{note[key]["comment"][0]}: ', var)
+            except Exception as e:
+                print(e)
