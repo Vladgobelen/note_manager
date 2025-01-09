@@ -1,3 +1,4 @@
+import datetime
 # vars
 note = {
         'username': {
@@ -71,6 +72,19 @@ def check_key(key, words):  # Checking for a word match with the dictionary
             return 1
 
 
+def chek_date(issue_date):
+    today = datetime.datetime.now().strftime('%d-%m-%Y')
+    today_mes = int("-".join(today.split(sep="-")[1:2]))
+    today_day = int("-".join(today.split(sep="-")[:1]))
+    check_day_mes = int("-".join(issue_date.split(sep="-")[1:2]))
+    check_day_day = int("-".join(issue_date.split(sep="-")[:1]))
+    if today_mes > check_day_mes:
+        return "Дедлайн прошел"
+    else:
+        if today_day > check_day_day:
+            return "Дедлайн прошел"
+
+
 # works
 print("Введите следущие данные(для завершения введите пустую строку): \n")
 for key in note:
@@ -90,4 +104,8 @@ for key in note:
     if key == 'content':
         get_var(key, 1, 1)
     else:
-        get_var(key, None, 1)
+        if key == "issue_date":
+            get_var(key, None, 1)
+            print(chek_date(note[key]['var'][0]))
+        else:
+            get_var(key, None, 1)
