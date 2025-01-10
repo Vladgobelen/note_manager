@@ -48,10 +48,18 @@ def get_var(key, link, end):  # Universal obtaining of variable values
         end_text = "изменено на"
     if link:
         for i, values in enumerate(note[key]['var']):
-            print(f'{note[key]['comment'][i]} {end_text}: {values}')
+            if key == "issue_date" or key == "created_date":
+                format_date = "-".join(values.split(sep="-")[:2])
+                print(f'{note[key]['comment'][i]} {end_text}: {format_date}')
+            else:
+                print(f'{note[key]['comment'][i]} {end_text}: {values}')
     else:
         for i, values in enumerate(note[key]['var']):
-            print(f'{note[key]['comment'][0]} {end_text}: {values}')
+            if key == "issue_date" or key == "created_date":
+                format_date = "-".join(values.split(sep="-")[:2])
+                print(f'{note[key]['comment'][0]} {end_text}: {format_date}')
+            else:
+                print(f'{note[key]['comment'][0]} {end_text}: {values}')
 
 
 def set_key(key, value, mod, message):  # Variable entry with validation
