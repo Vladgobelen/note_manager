@@ -57,40 +57,46 @@ def get_current_day(my_date):
     return my_date.days
 
 
-def chek_date(first_date, second_date):
+def check_date(first_date, second_date):
     return get_current_day((first_date)-(second_date))
 
 
-def get_date(issue_date):
+def get_date(my_date):
     today = datetime.datetime.now()
-    check_day = dt.strptime(issue_date, '%d-%m-%Y')
-    if chek_date(today, check_day) > 0:
-        print(f"Дедлайн прошел {chek_date(today, check_day)} дней назад")
+    check_day = dt.strptime(my_date, '%d-%m-%Y')
+    if check_date(today, check_day) > 0:
+        print(f"Дедлайн прошел {check_date(today, check_day)} дней назад")
+        return 1
     else:
-        print(f"Дедлайн через {-1*int(chek_date(today, check_day))} дней")
+        print(f"Дедлайн через {-1*int(check_date(today, check_day))} дней")
+        return 1
+
+
+def input_value():
+    for key in note:
+        index = 0
+        while True:
+            temp_text = input(f'{note[key]['comment'][0]}: ')
+            if temp_text == "":
+                note[key]['var'] = list(set(note[key]['var']))
+                note[key]['var'].sort()
+                break
+            else:
+                set_key(key, 'var', index, temp_text)
+                index += 1
 
 
 # works
 print("Введите следущие данные(для завершения введите пустую строку): \n")
-for key in note:
-    index = 0
-    while True:
-        temp_text = input(f'{note[key]['comment'][0]}: ')
-        if temp_text == "":
-            note[key]['var'] = list(set(note[key]['var']))
-            note[key]['var'].sort()
-            break
-        else:
-            set_key(key, 'var', index, temp_text)
-            index += 1
+input_value()
 
 print("\n")
-for key in note:
-    if key == 'content':
-        get_var(key, 1, 1)
-    else:
-        if key == "issue_date":
-            get_var(key, None, 1)
-            get_date(note[key]['var'][0])
-        else:
-            get_var(key, None, 1)
+while True:
+    try:
+        get_var("issue_date", None, 1)
+        if get_date(note['issue_date']['var'][0]) == 1:
+            break
+    except ValueError:
+        note['issue_date']['var'] = []
+        print("Введите правилно дату: ДД-ММ-ГГ")
+        input_value()
