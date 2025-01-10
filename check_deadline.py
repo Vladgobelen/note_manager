@@ -1,4 +1,5 @@
 import datetime
+from datetime import datetime as dt
 # vars
 note = {
         'username': {
@@ -73,16 +74,13 @@ def check_key(key, words):  # Checking for a word match with the dictionary
 
 
 def chek_date(issue_date):
-    today = datetime.datetime.now().strftime('%d-%m-%Y')
-    today_mes = int("-".join(today.split(sep="-")[1:2]))
-    today_day = int("-".join(today.split(sep="-")[:1]))
-    check_day_mes = int("-".join(issue_date.split(sep="-")[1:2]))
-    check_day_day = int("-".join(issue_date.split(sep="-")[:1]))
-    if today_mes > check_day_mes:
-        return "Дедлайн прошел"
+    today = datetime.datetime.now()
+    check_day = dt.strptime(issue_date, '%d-%m-%Y')
+    diff = today - check_day
+    if int(diff.days) > 0:
+        print(f"Дедлайн прошел {int(diff.days)} дней назад")
     else:
-        if today_day > check_day_day:
-            return "Дедлайн прошел"
+        print(f"Дедлайн будет через {-1*int(diff.days)} дней")
 
 
 # works
@@ -106,6 +104,6 @@ for key in note:
     else:
         if key == "issue_date":
             get_var(key, None, 1)
-            print(chek_date(note[key]['var'][0]))
+            chek_date(note[key]['var'][0])
         else:
             get_var(key, None, 1)
