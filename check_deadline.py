@@ -54,11 +54,11 @@ def check_key(key, words):  # Checking for a word match with the dictionary
 
 
 def get_current_day(my_date):
-    return my_date.strftime('%d')
+    return my_date.days
 
 
 def chek_date(first_date, second_date):
-    return int(get_current_day(first_date))-int(get_current_day(second_date))
+    return get_current_day((first_date)-(second_date))
 
 
 def get_date(issue_date):
