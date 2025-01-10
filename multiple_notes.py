@@ -78,12 +78,6 @@ def set_key(key, value, mod, message, n_index):  # Variable entry
 
 
 def check_key(key, words):  # Checking for a word match with the dictionary
-    for word in notes[n_index][key]['check']:
-        if word in words:
-            return 1
-
-
-def check_key(key, words):  # Checking for a word match with the dictionary
     for word in note[key]['check']:
         if word in words:
             return 1
@@ -110,28 +104,29 @@ def get_date(my_date):
 
 # works
 print("Введите следущие данные(для завершения введите пустую строку): \n")
-n_index = 0
+number = 0
 need_break = "да"
 while need_break == "да":
     notes.append(deepcopy(note))
     for key in note:
         index = 0
         while True:
-            temp_text = input(f'{notes[n_index][key]['comment'][0]}: ')
+            temp_text = input(f'{notes[number][key]['comment'][0]}: ')
             if temp_text == "":
-                notes[n_index][key]['var'] = list(set(notes[n_index][key]['var']))
-                notes[n_index][key]['var'].sort()
+                t_notes = notes[number][key]['var']
+                t_notes = list(set(notes[number][key]['var']))
+                notes[number][key]['var'].sort()
                 if key == "issue_date":
                     need_break = input("Добавить еще одну заметку?(да нет)")
-                    n_index += 1
+                    number += 1
                 break
             else:
-                set_key(key, 'var', index, temp_text, n_index)
+                set_key(key, 'var', index, temp_text, number)
                 index += 1
 
 print("\n")
 for note in notes:
-    for kye in note:
+    for key in note:
         if key == 'content':
             get_var(key, 1, 1, note)
         else:
