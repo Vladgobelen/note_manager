@@ -2,34 +2,6 @@ import datetime
 from datetime import datetime as dt
 # vars
 note = {
-        'username': {
-                    "var": [],
-                    "comment": ['Имя пользователя'],
-                    "check": ["all"]
-                    },
-        'title1': {
-                    "var": [],
-                    "comment": ["Заголовок заметки"],
-                    "check": ["all"]
-                    },
-        'content': {
-                    "var": [],
-                    "comment": [
-                                "Описание заметки",
-                                "Описание заметки",
-                                ],
-                    "check": ["all"]
-                    },
-        'status': {
-                    "var": [],
-                    "comment": ["Статус заметки"],
-                    "check": ["в процессе", "выполнено", "отложено"]
-                    },
-        'created_date': {
-                        "var": [],
-                        "comment": ["Дата создания заметки(ДД-ММ-ГГГГ)"],
-                        "check": ["all"]
-                        },
         'issue_date': {
                         "var": [],
                         "comment": ["Дата истечения заметки(ДД-ММ-ГГГГ)"],
