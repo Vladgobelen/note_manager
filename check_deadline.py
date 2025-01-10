@@ -81,14 +81,21 @@ def check_key(key, words):  # Checking for a word match with the dictionary
             return 1
 
 
-def chek_date(issue_date):
+def get_current_day(my_date):
+    return my_date.strftime('%d')
+
+
+def chek_date(first_date, second_date):
+    return int(get_current_day(first_date))-int(get_current_day(second_date))
+
+
+def get_date(issue_date):
     today = datetime.datetime.now()
     check_day = dt.strptime(issue_date, '%d-%m-%Y')
-    diff = today - check_day
-    if int(diff.days) > 0:
-        print(f"Дедлайн прошел {int(diff.days)} дней назад")
+    if chek_date(today, check_day) > 0:
+        print(f"Дедлайн прошел {chek_date(today, check_day)} дней назад")
     else:
-        print(f"Дедлайн будет через {-1*int(diff.days)} дней")
+        print(f"Дедлайн через {-1*int(chek_date(today, check_day))} дней")
 
 
 # works
@@ -112,6 +119,6 @@ for key in note:
     else:
         if key == "issue_date":
             get_var(key, None, 1)
-            chek_date(note[key]['var'][0])
+            get_date(note[key]['var'][0])
         else:
             get_var(key, None, 1)
