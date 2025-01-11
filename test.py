@@ -102,21 +102,21 @@ def del_note():  # deleting notes
             break
 
 
-def get_current_day(my_date):
+def get_current_day(my_date):  # get days from a date
     return my_date.days
 
 
-def check_date(first_date, second_date):
+def check_date(first_date, second_date):  # subtract dates from each other
     return get_current_day((first_date)-(second_date))
 
 
-def get_date(my_date):
+def get_date(my_date):  # comparing dates
     today = datetime.datetime.now()
     check_day = dt.strptime(my_date, '%d-%m-%Y')
     return check_date(today, check_day)
 
 
-def deadline(my_dict, my_date):
+def deadline(my_dict, my_date):  # deadline check
     count = get_date(my_dict['issue_date']['var'][0])
     if count > 0:
         result = "Дедлайн прошел " + str(count) + " дней назад"
@@ -156,7 +156,7 @@ def show_print():  # information about notes
             notes.append(deepcopy(note))
 
 
-def input_title():
+def input_title():  # checking the title entry
     title = []
     while True:
         print("Введите заголовок или нажмите энтер для завершения: ", end="")
@@ -168,7 +168,7 @@ def input_title():
     return title
 
 
-def input_status():
+def input_status():  # checking the status entry
     print("\nВведите статус заметки: ", end="")
     print(*note["status"]['check'], sep=", ")
     while True:
@@ -178,7 +178,7 @@ def input_status():
     return word
 
 
-def input_date(key):
+def input_date(key):  # checking the date entry
     format = "%d-%m-%Y"
     while True:
         created_date = input(comment(note, key) + ': ')
@@ -189,7 +189,7 @@ def input_date(key):
             print("Неправильный формат даты (ДД-ММ-ГГГ), попробуйте еще раз: ")
 
 
-def create_note():
+def create_note():  # Creating a note
     while True:
         name = input('Введите ' + comment(note, "username") + ': ')
         notes[len(notes)-1]['username']['var'].clear()
