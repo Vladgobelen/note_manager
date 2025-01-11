@@ -5,13 +5,13 @@ from copy import deepcopy
 notes = []
 note = {
         'delete': {
-                    "var": [],
+                    "var": [""],
                     "comment": "Выберите: удалить, создать заметку или выйти",
                     "check": ["удалить", "создать", "выйти"],
                     "check_del": ["все заметки", "по заголовку", "по имени"]
                     },
         'username': {
-                    "var": [],
+                    "var": [""],
                     "comment": 'имя пользователя',
                     "check": ["all"]
                     },
@@ -21,22 +21,22 @@ note = {
                     "check": ["all"]
                     },
         'content': {
-                    "var": [],
+                    "var": [""],
                     "comment": "описание заметки",
                     "check": ["all"]
                     },
         'status': {
-                    "var": [],
+                    "var": [""],
                     "comment": "статус заметки",
                     "check": ["в процессе", "выполнено", "отложено"]
                     },
         'created_date': {
-                        "var": [],
+                        "var": [""],
                         "comment": "Дата создания заметки(ДД-ММ-ГГГГ)",
                         "check": ["all"]
                         },
         'issue_date': {
-                        "var": [],
+                        "var": [""],
                         "comment": "Дата истечения заметки(ДД-ММ-ГГГГ)",
                         "check": ["all"]
                         }
@@ -46,7 +46,7 @@ note = {
 
 
 def is_notes():  # does the note exist
-    if len(notes) >= 1 and notes[0]['username']['var'] != "":
+    if len(notes) >= 1 and notes[0]['username']['var'][0] != '':
         return 1
 
 
@@ -82,22 +82,51 @@ def check_exit(key):  # checking the correct input(exit)
 
 def del_note():  # deleting notes
     while True:
-        print(print_notes())
-        print("Напишите, что удалять: ", end="")
-        print(*note['delete']['check_del'], sep=", ", end=": ")
-        word = input()
-        if check_key(notes[len(notes)-1], "delete", "check_del", word):
-            if word == "все заметки":
-                notes.clear()
-                notes.append(deepcopy(note))
-            elif word == "по заголовку":
-                del_by('title', input("Введите заголовок: "))
-            elif word == "по имени":
-                del_by('username', input("Введите имя: "))
-            break
+        if show_print():
+            print("Напишите, что удалять: ", end="")
+            print(*note['delete']['check_del'], sep=", ", end=": ")
+            word = input()
+            if check_key(notes[len(notes)-1], "delete", "check_del", word):
+                if word == "все заметки":
+                    notes.clear()
+                    notes.append(deepcopy(note))
+                elif word == "по заголовку":
+                    del_by('title', input("Введите заголовок: "))
+                elif word == "по имени":
+                    del_by('username', input("Введите имя: "))
+                break
+            else:
+                print(f'"{word}" это недопустимое слово. Выберите из: \n')
+                print(*notes[len(notes)-1]["delete"]['check_del'], sep="\n")
         else:
-            print(f'"{word}" является недопустимым словом. Выберите из: \n')
-            print(*notes[len(notes)-1]["delete"]['check_del'], sep="\n")
+            break
+
+
+def get_current_day(my_date):
+    return my_date.days
+
+
+def check_date(first_date, second_date):
+    return get_current_day((first_date)-(second_date))
+
+
+def get_date(my_date):
+    today = datetime.datetime.now()
+    check_day = dt.strptime(my_date, '%d-%m-%Y')
+    return check_date(today, check_day)
+
+
+def deadline(my_dict, my_date):
+    count = get_date(my_dict['issue_date']['var'][0])
+    if count > 0:
+        result = "Дедлайн прошел " + str(count) + " дней назад"
+        return result
+    elif count == 0:
+        result = "Дедлайн сегодня"
+        return result
+    elif count < 0:
+        result = "Дедлайн пойдет через " + str(abs(count)) + " дней"
+        return result
 
 
 def print_notes():  # summary of the notes
@@ -112,15 +141,19 @@ def print_notes():  # summary of the notes
             i += 1
         result = result + "\nОписание: "
         result = result + note['content']['var'][0] + "\n"
+        if note['issue_date']['var'][0] != "":
+            result = result + deadline(note, note['issue_date']['var'][0])
         return result
 
 
 def show_print():  # information about notes
     if is_notes():
         print(print_notes())
+        return 1
     else:
-        print("Нет ни одной заметки\n")
-        notes.append(deepcopy(note))
+        print("\nНет ни одной заметки\n")
+        if len(notes) == 0:
+            notes.append(deepcopy(note))
 
 
 def input_title():
@@ -159,18 +192,22 @@ def input_date(key):
 def create_note():
     while True:
         name = input('Введите ' + comment(note, "username") + ': ')
+        notes[len(notes)-1]['username']['var'].clear()
         notes[len(notes)-1]['username']['var'].append(name)
         title = input_title()
         notes[len(notes)-1]['title']['var'] = title
         content = input('Введите ' + comment(note, "content") + ': ')
+        notes[len(notes)-1]['content']['var'].clear()
         notes[len(notes)-1]['content']['var'].append(content)
         status = input_status()
+        notes[len(notes)-1]['status']['var'].clear()
         notes[len(notes)-1]['status']['var'].append(status)
         create = input_date('created_date')
+        notes[len(notes)-1]['created_date']['var'].clear()
         notes[len(notes)-1]['created_date']['var'].append(create)
         create = input_date('issue_date')
+        notes[len(notes)-1]['issue_date']['var'].clear()
         notes[len(notes)-1]['issue_date']['var'].append(create)
-        print(notes)
         break
 
 
@@ -181,7 +218,10 @@ def work(need_break):  # The main code
         if exit_word == "выйти":
             break
         elif exit_word == "удалить":
-            del_note()
+            if is_notes():
+                del_note()
+            else:
+                print("Нечего удалять")
         elif exit_word == "создать":
             create_note()
         show_print()
@@ -192,4 +232,3 @@ print('Добро пожаловать в "Менеджер заметок"!\n')
 need_break = "да"
 work(need_break)
 print("\n")
-show_print()
