@@ -66,17 +66,15 @@ def del_by(key, del_word):  # deleting a note by parameter
             if del_word == del_title:
                 del notes[i]
                 print('\nЗаметка удалена')
-                if len(notes) == 0:
-                    notes.append(deepcopy(note))
 
 
 def check_exit(key):  # checking the correct input(exit)
     word = input(comment(note, key) + ": ")
-    if check_key(notes[len(notes)-1], key, "check", word):
+    if check_key(note, key, "check", word):
         return word
     else:
         print(f'"{word}" является недопустимым словом. Выберите из: \n')
-        print(*notes[len(notes)-1][key]['check'], sep="\n")
+        print(*note[key]['check'], sep="\n")
         return ""
 
 
@@ -89,7 +87,6 @@ def del_note():  # deleting notes
             if check_key(notes[len(notes)-1], "delete", "check_del", word):
                 if word == "все заметки":
                     notes.clear()
-                    notes.append(deepcopy(note))
                 elif word == "по заголовку":
                     del_by('title', input("Введите заголовок: "))
                 elif word == "по имени":
@@ -130,9 +127,8 @@ def deadline(my_dict, my_date):  # deadline check
 
 
 def print_notes():  # summary of the notes
-    result = ""
+    result = "\nЗаметки: \n"
     for note in notes:
-        result = "\nЗаметки: \n"
         result = result + "\nИмя: " + note['username']['var'][0] + "\n"
         result = result + "Заголовки: "
         i = 0
@@ -143,7 +139,8 @@ def print_notes():  # summary of the notes
         result = result + note['content']['var'][0] + "\n"
         if note['issue_date']['var'][0] != "":
             result = result + deadline(note, note['issue_date']['var'][0])
-        return result
+            result = result + '\n'
+    return result
 
 
 def show_print():  # information about notes
@@ -152,8 +149,6 @@ def show_print():  # information about notes
         return 1
     else:
         print("\nНет ни одной заметки\n")
-        if len(notes) == 0:
-            notes.append(deepcopy(note))
 
 
 def input_title():  # checking the title entry
@@ -223,12 +218,14 @@ def work(need_break):  # The main code
             else:
                 print("Нечего удалять")
         elif exit_word == "создать":
+            notes.append(deepcopy(note))
             create_note()
         show_print()
 
 
 # works
 print('Добро пожаловать в "Менеджер заметок"!\n')
+
 need_break = "да"
 work(need_break)
 print("\n")
