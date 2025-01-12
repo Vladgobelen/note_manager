@@ -3,11 +3,12 @@ from datetime import datetime as dt
 from copy import deepcopy
 # vars
 notes = []
+delete_list = "Выберите: удалить, создать заметку, сменить статус или выйти"
 note = {
         'delete': {
                     "var": [""],
-                    "comment": "Выберите: удалить, создать заметку или выйти",
-                    "check": ["удалить", "создать", "выйти"],
+                    "comment": delete_list,
+                    "check": ["удалить", "создать", "выйти", "сменить статус"],
                     "check_del": ["все заметки", "по заголовку", "по имени"]
                     },
         'username': {
@@ -127,8 +128,10 @@ def deadline(my_dict, my_date):  # deadline check
 
 
 def print_notes():  # summary of the notes
-    result = "\nЗаметки: \n"
+    result = "\nЗаметки: \n\n"
+    i = 1
     for note in notes:
+        result = result + f'Заметка номер {i}' + '\n'
         result = result + "\nИмя: " + note['username']['var'][0] + "\n"
         result = result + "Заголовки: "
         i = 0
@@ -137,9 +140,11 @@ def print_notes():  # summary of the notes
             i += 1
         result = result + "\nОписание: "
         result = result + note['content']['var'][0] + "\n"
+        result = result + "Статус: " + note['status']['var'][0] + "\n"
         if note['issue_date']['var'][0] != "":
             result = result + deadline(note, note['issue_date']['var'][0])
-            result = result + '\n'
+            result = result + '\n\n'
+        i += 1
     return result
 
 
@@ -206,9 +211,15 @@ def create_note():  # Creating a note
         break
 
 
-def work(need_break):  # The main code
+def change_status():
+    status = int(input("Введите номер изменяемой заметки: "))
+    notes[status-1]['status']['var'].clear()
+    notes[status-1]['status']['var'].append(input_status())
+
+
+def work():  # The main code
     show_print()
-    while need_break == "да":
+    while True:
         exit_word = check_exit("delete")
         if exit_word == "выйти":
             break
@@ -220,12 +231,16 @@ def work(need_break):  # The main code
         elif exit_word == "создать":
             notes.append(deepcopy(note))
             create_note()
+        elif exit_word == "сменить статус":
+            if is_notes():
+                change_status()
+            else:
+                print("Нет заметок для изменения статуса")
         show_print()
 
 
 # works
 print('Добро пожаловать в "Менеджер заметок"!\n')
 
-need_break = "да"
-work(need_break)
+work()
 print("\n")
