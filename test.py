@@ -71,7 +71,7 @@ def del_by(key, del_word):  # deleting a note by parameter
 
 def check_exit(key):  # checking the correct input(exit)
     word = input(comment(note, key) + ": ")
-    if check_key(note, key, "check", word):
+    if check_key(note, key, "check", word.lower()):
         return word
     else:
         print(f'"{word}" является недопустимым словом. Выберите из: \n')
@@ -189,6 +189,11 @@ def input_date(key):  # checking the date entry
             print("Неправильный формат даты (ДД-ММ-ГГГ), попробуйте еще раз: ")
 
 
+def input_today():  # checking the date entry
+    format = "%d-%m-%Y"
+    return dt.now().strftime(format)
+
+
 def create_note():  # Creating a note
     while True:
         name = input('Введите ' + comment(note, "username") + ': ')
@@ -202,9 +207,8 @@ def create_note():  # Creating a note
         status = input_status()
         notes[len(notes)-1]['status']['var'].clear()
         notes[len(notes)-1]['status']['var'].append(status)
-        create = input_date('created_date')
         notes[len(notes)-1]['created_date']['var'].clear()
-        notes[len(notes)-1]['created_date']['var'].append(create)
+        notes[len(notes)-1]['created_date']['var'].append(input_today())
         create = input_date('issue_date')
         notes[len(notes)-1]['issue_date']['var'].clear()
         notes[len(notes)-1]['issue_date']['var'].append(create)
