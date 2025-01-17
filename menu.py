@@ -6,62 +6,82 @@ from display_notes_function import display_notes
 from delete_note import delete_notes
 from search_notes_function import choice_search
 
-# Инициализация colorama
+# Инициализация colorama для работы с цветным текстом в консоли
 init(autoreset=True)
-
-# Список для хранения всех заметок
-#     {
-#         'username': 'Алексей',
-#         'titles': ['Список покупок'],
-#         'content': 'Купить продукты на неделю',
-#         'status': 'новая',
-#         'created_date': '12-01-2025',
-#         'issue_date': '13-02-2025'
-#     },
-#     {
-#         'username': 'Мария',
-#         'titles': ['Учеба', 'Спорт'],
-#         'content': 'Подготовиться к экзамену',
-#         'status': 'в процессе',
-#         'created_date': '01-01-2025',
-#         'issue_date': '25-06-2025'
-#     }
-# ]
- 
- 
-# Функция для удаления заметки
-# def delete_note():
-#     display_notes(notes)
-#     note_index = int(input(Fore.YELLOW + "Введите номер заметки для удаления: " + Style.RESET_ALL)) - 1
-#     if 0 <= note_index < len(notes):
-#         confirm = input(Fore.RED + "Вы уверены, что хотите удалить эту заметку? (да/нет): " + Style.RESET_ALL)
-#         if confirm.lower() == 'да':
-#             del notes[note_index]
-#             print(Fore.GREEN + "Заметка удалена!" + Style.RESET_ALL)
-#         else:
-#             print(Fore.YELLOW + "Удаление отменено." + Style.RESET_ALL)
-#     else:
-#         print(Fore.RED + "Неверный номер заметки." + Style.RESET_ALL)
- 
- 
-# Функция для отображения меню и обработки выбора пользователя
 
 
 def choice_note(notes):
+    """
+    Функция для выбора заметки по её номеру.
+    :param notes: Список заметок.
+    :return: Индекс выбранной заметки в списке.
+    """
     check_size = len(notes)
     while True:
         try:
             my_note = int(input("Введите номер заметки, которую нужно изменить: "))
-            if int(my_note) >= 1 and int(my_note) <= check_size:
-                return int(my_note)-1
+            if 1 <= my_note <= check_size:
+                return my_note - 1  # Возвращаем индекс (нумерация с 0)
             else:
                 print("Такой заметки не существует")
-        except Exception:
+        except ValueError:
             print("Введите номер заметки - число")
 
 
+def handle_create_note(notes):
+    """
+    Обработка создания новой заметки.
+    :param notes: Список заметок.
+    """
+    notes.append(create_note())
+    print(Fore.GREEN + "Заметка создана!" + Style.RESET_ALL)
+
+
+def handle_update_note(notes):
+    """
+    Обработка обновления существующей заметки.
+    :param notes: Список заметок.
+    """
+    if notes:
+        note_index = choice_note(notes)
+        update_note(notes[note_index])
+        print(Fore.GREEN + "Заметка обновлена!" + Style.RESET_ALL)
+    else:
+        print("Нет заметок для изменения")
+
+
+def handle_delete_note(notes):
+    """
+    Обработка удаления заметки.
+    :param notes: Список заметок.
+    :return: Обновлённый список заметок после удаления.
+    """
+    if notes:
+        notes = delete_notes(notes)
+        print(Fore.GREEN + "Заметка удалена!" + Style.RESET_ALL)
+    else:
+        print("Нет заметок для удаления")
+    return notes
+
+
+def handle_search_note(notes):
+    """
+    Обработка поиска заметок.
+    :param notes: Список заметок.
+    """
+    if notes:
+        choice_search(notes)
+    else:
+        print("Нет заметок для поиска")
+
+
 def menu(notes):
+    """
+    Основное меню программы.
+    :param notes: Список заметок.
+    """
     while True:
+        # Вывод меню
         print(Fore.CYAN + "\nМеню действий:" + Style.RESET_ALL)
         print("1. Создать новую заметку")
         print("2. Показать все заметки")
@@ -69,47 +89,37 @@ def menu(notes):
         print("4. Удалить заметку")
         print("5. Найти заметки")
         print("6. Выйти из программы")
+
+        # Получение выбора пользователя
         choice = input(Fore.YELLOW + "Ваш выбор: " + Style.RESET_ALL)
- 
+
+        # Обработка выбора пользователя
         if choice == '1':
-            notes.append(create_note())
+            handle_create_note(notes)
         elif choice == '2':
-            display_notes(notes)  # Вывод всех заметок
+            display_notes(notes)
         elif choice == '3':
-            if len(notes):
-                update_note(notes[choice_note(notes)])
-            else:
-                print("Нет заметок для изменения")
+            handle_update_note(notes)
         elif choice == '4':
-            if len(notes):
-                notes = delete_notes(notes)
-            else:
-                print("Нет заметок для удаление")
+            notes = handle_delete_note(notes)
         elif choice == '5':
-            if len(notes):
-                choice_search(notes)
-            else:
-                print("Нет заметок для поиска")
+            handle_search_note(notes)
         elif choice == '6':
-            print(Fore.GREEN + "Программа завершена. \
-Спасибо за использование!" + Style.RESET_ALL)
+            print(Fore.GREEN + "Программа завершена. Спасибо за использование!" + Style.RESET_ALL)
             break
         else:
-            print(Fore.RED + "Неверный выбор. Пожалуйста, \
-выберите действие из списка." + Style.RESET_ALL)
- 
- 
-# Основная функция для запуска программы
+            print(Fore.RED + "Неверный выбор. Пожалуйста, выберите действие из списка." + Style.RESET_ALL)
+
+
 def main():
-    print(
-        Fore.CYAN + "Добро пожаловать в 'Менеджер заметок'!" +
-        Style.RESET_ALL
-    )
-    menu(notes)
- 
- 
-# точка входа
+    """
+    Основная функция для запуска программы.
+    """
+    print(Fore.CYAN + "Добро пожаловать в 'Менеджер заметок'!" + Style.RESET_ALL)
+    notes = []  # Инициализация списка заметок
+    menu(notes)  # Запуск меню
+
+
+# Точка входа в программу
 if __name__ == "__main__":
-    # Запуск основной функции
-    notes = []
     main()
