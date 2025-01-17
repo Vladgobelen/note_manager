@@ -1,46 +1,44 @@
-# vars
-note = {
-        'status': {
-                    "var": ["в процессе"],
-                    "comment": ["Статус заметки"],
-                    "check": ["в процессе", "выполнено", "отложено"]
-                    },
-        }
-# defs
+# Создаем словарь для хранения данных заметки
+note = {}
+
+# Запрашиваем у пользователя текущий статус заметки
+note["status"] = input("Введите текущий статус \
+заметки (например, 'в процессе', 'выполнено', 'отложено'): ")
 
 
-def get_var(key, link):  # Universal obtaining of variable values
-    if link:
-        for i, values in enumerate(note[key]['var']):
-            print(f'{note[key]['comment'][i]}: {values}')
-    else:
-        for i, values in enumerate(note[key]['var']):
-            print(f'{note[key]['comment'][0]}: {values}')
+# Функция для отображения списка доступных статусов
+def display_status_options():
+    print("\nВыберите новый статус заметки:")
+    print("1. Выполнено")
+    print("2. В процессе")
+    print("3. Отложено")
 
 
-def set_key(key, value, mod, message):  # Variable entry with validation
-    if note[key]['check']:
-        if check_key(key, message):
-            note[key][value][mod] = message
-            print(f"{note[key]['comment'][0]} изменен на: {message}")
+# Функция для обновления статуса
+def update_note_status():
+    valid_statuses = {
+        "1": "выполнено",
+        "2": "в процессе",
+        "3": "отложено"
+    }
+
+    while True:
+        display_status_options()
+        choice = input("Ваш выбор (введите номер статуса либо нажмите Ввод \
+чтобы оставить прежний статус): ")
+
+        # Проверяем корректность ввода
+        if choice in valid_statuses:
+            note["status"] = valid_statuses[choice]
+            print("Статус заметки успешно обновлён на:", note["status"])
+            break
+        elif choice == "":
+            print(f"Текущий статус заметки: {note["status"]}")
+            break
         else:
-            print(f'"{message}" является недопустимым словом. Выберите из: ')
-            print(*note[key]['check'], sep="\n")
+            print("Некорректный ввод. Пожалуйста, выберите номер из \
+предложенных вариантов.")
 
 
-def check_key(key, words):  # Checking for a word match with the dictionary
-    for word in note[key]['check']:
-        if word in words:
-            return 1
-
-
-# works
-get_var("status", None)  # Getting the current status.
-while True:  # Recording a new status
-    status = note['status']['comment'][0]
-    var = input(f'Укажите новый {status} или введите ничего для завершения: ')
-    if var == "":  # Exiting the program
-        get_var("status", None)
-        break
-    else:  # Status changed
-        set_key('status', 'var', 0, var)
+# Вызываем функцию для обновления статуса
+update_note_status()

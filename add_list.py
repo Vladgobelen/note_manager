@@ -1,31 +1,32 @@
-import datetime
+# Запрашиваем у пользователя информацию
+username = input("Введите имя пользователя: ")
 
-# functions
+# Создаем список заголовков заметки
+titles = []
+for i in range(3):
+    titles.append(input(f"Введите заголовок заметки {i + 1}: "))
 
+content = input("Введите описание заметки: ")
+status = input("Введите статус заметки \
+(например, 'В работе', 'Выполнена'): ")
+created_date = input("Введите дату создания заметки \
+в формате 'ДД-ММ-ГГГГ': ")
+issue_date = input("Введите дату истечения заметки \
+в формате 'ДД-ММ-ГГГГ': ")
 
-def add_titles(number):  # Adding three headers
-    for i in range(1, number+1):
-        title.append(input(f'Заголовок заметки номер {i}: '))
+# Выводим все данные
+print("\nВы ввели следующие данные:")
+print("Имя пользователя:", username)
 
+# Выводим список заголовков заметки
+for i in range(3):
+    print(f'Заголовок заметки номер {i}: {titles[i - 1]}')
 
-def read_titles():  # Reading three headers
-    for i in range(1, len(title)+1):  # headers output
-        print(f'Заголовок заметки номер {i}: {title[i-1]}')
+print("Описание заметки:", content)
+print("Статус заметки:", status)
 
-
-# variables
-username = input('Имя пользователя: ')
-title = []
-add_titles(3)
-content = input('Описание заметки: ')
-status = input('Статус заметки: ')
-created_date = datetime.datetime.now().strftime('%d-%m-%Y')
-issue_date = input('Дата истечения заметки (день-месяц-год): ')
-
-# working
-print('\nИмя пользователя:', username)
-read_titles()
-print('Описание заметки:', content)
-print('Статус заметки:', status)
-print('Дата создания заметки:', "-".join(created_date.split(sep="-")[:2]))
-print('Дата истечения заметки:', "-".join(issue_date.split(sep="-")[:2]))
+# Выводим дату без года.
+print('Дата создания \
+заметки:', "-".join(created_date.split(sep="-")[:2]))
+print('Дата истечения \
+заметки:', "-".join(issue_date.split(sep="-")[:2]))

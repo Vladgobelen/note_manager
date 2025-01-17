@@ -1,29 +1,37 @@
-# variables
-note = {
-        'username': '',
-        'title': [],
-        'content': '',
-        'status': '',
-        'created_date': '',
-        'issue_date': '',
-        }
-note['username'] = input('Введите имя пользователя: ')
-note['title'].append(input('Введите заголовок заметки 1: '))
-note['title'].append(input('Введите заголовок заметки 2: '))
-note['title'].append(input('Введите заголовок заметки 3: '))
-note['content'] = input('Введите описание заметки: ')
-note['status'] = input('Введите статус заметки: ')
-note['created_date'] = input('Введите дату создания заметки(дд-мм-гггг): ')
-note['issue_date'] = input('Введите дату истечения заметки (дд-мм-гггг): ')
+# Создали словарь для хранения данных заметки
+note = {}
 
-# working
-print('\n Имя пользователя:', note['username'])
-print('Заголовок заметки 1:', note['title'][0])
-print('Заголовок заметки 2:', note['title'][1])
-print('Заголовок заметки 3:', note['title'][2])
-print('Описание заметки:', note['content'])
-print('Статус заметки:', note['status'])
-print('Дата создания заметки: ', end="")
-print("-".join(note['created_date'].split(sep="-")[:2]))
-print('Дата истечения заметки: ', end="")
-print("-".join(note['issue_date'].split(sep="-")[:2]))
+# Запрашиваем у пользователя информацию
+note["username"] = input("Введите имя пользователя: ")
+
+# Создаем список заголовков заметки
+note["titles"] = []
+for i in range(3):
+    title = input(f"Введите заголовок заметки {i + 1}: ")
+    note["titles"].append(title)
+
+note["content"] = input("Введите описание заметки: ")
+note["status"] = input("Введите статус заметки \
+(например, 'В работе', 'Выполнена'): ")
+note["created_date"] = input("Введите дату создания заметки \
+в формате 'ДД-ММ-ГГГГ': ")
+note["issue_date"] = input("Введите дату истечения заметки \
+в формате 'ДД-ММ-ГГГГ': ")
+
+# Выводим все данные
+print("\nВы ввели следующие данные:")
+print("Имя пользователя:", note["username"])
+
+# Выводим список заголовков заметки
+for i in range(3):
+    title = note["titles"][i]
+    print(f'Заголовок заметки номер {i + 1}: {title}')
+
+print("Описание заметки:", note["content"])
+print("Статус заметки:", note["status"])
+
+# Выводим дату без года.
+print('Дата создания \
+заметки:', "-".join(note['created_date'].split(sep="-")[:2]))
+print('Дата истечения \
+заметки:', "-".join(note['issue_date'].split(sep="-")[:2]))

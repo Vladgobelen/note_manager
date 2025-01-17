@@ -1,122 +1,73 @@
-from datetime import datetime as dt
-from copy import deepcopy
-# vars
-notes = []
-note = {
-        'username': {
-                    "var": [""],
-                    "comment": 'имя пользователя',
-                    "check": ["all"]
-                    },
-        'title': {
-                    "var": [],
-                    "comment": "заголовок заметки",
-                    "check": ["all"]
-                    },
-        'content': {
-                    "var": [""],
-                    "comment": "описание заметки",
-                    "check": ["all"]
-                    },
-        'status': {
-                    "var": [""],
-                    "comment": "статус заметки",
-                    "check": ["в процессе", "выполнено", "отложено"]
-                    },
-        'created_date': {
-                        "var": [""],
-                        "comment": "Дата создания заметки(ДД-ММ-ГГГГ)",
-                        "check": ["all"]
-                        },
-        'issue_date': {
-                        "var": [""],
-                        "comment": "Дата истечения заметки(ДД-ММ-ГГГГ)",
-                        "check": ["all"]
-                        }
-        }
-# defs
+# Импортируем необходимые модули для работы с датами
+from datetime import datetime
 
 
-def check_key(my_dict, key, var, words):  # does the word exist
-    for word in my_dict[key][var]:
-        if word in words:
-            return 1
-
-
-def comment(my_dict, var):  # returns the comment of the note
-    return my_dict[var]['comment']
-
-
-def check_exit(key):  # checking the correct input(exit)
-    word = input(comment(note, key) + ": ")
-    if check_key(note, key, "check", word):
-        return word
-    else:
-        print(f'"{word}" является недопустимым словом. Выберите из: \n')
-        print(*note[key]['check'], sep="\n")
-        return ""
-
-
-def input_status():  # checking the status entry
-    print("\nВведите статус заметки: ", end="")
-    print(*note["status"]['check'], sep=", ")
+# Функция для проверки ввода "да" или "нет"
+def confirm(prompt):
     while True:
-        word = check_exit("status")
-        if word != "":
-            break
-    return word
+        response = input(prompt).strip().lower()
+        if response == 'да':
+            return True
+        elif response == 'нет' or response == '':
+            return False
+        else:
+            print("Некорректный ввод. Пожалуйста, введите 'да' или 'нет'.")
 
 
-def input_title():  # checking the title entry
-    title = []
+# Функция для проверки корректного ввода даты
+def input_date(prompt):
     while True:
-        print("Введите заголовок или нажмите энтер для завершения: ", end="")
-        word = input()
-        if word == "":
+        try:
+            date_input = input(prompt)  # Запрос ввода даты
+            datetime.strptime(date_input, "%d-%m-%Y")  # Проверка формата даты
+            return date_input  # Возврат корректно введенной даты
+        except ValueError:
+            print("Некорректный формат даты. Пожалуйста, используйте формат 'ДД-ММ-ГГГГ'.")
+
+
+# Функция создания новой заметки
+def create_note():
+    note = {}
+
+    note["username"] = input("Введите имя пользователя: ")
+
+    note["titles"] = []  # Инициализация списка заголовков заметки
+    print("Введите заголовки заметок (оставьте пустым для завершения):")
+    while True:
+        title = input("Введите заголовок заметки: ")
+        if title == "":
+            break  # Завершение ввода, если пользователь оставил строку пустой
+        note["titles"].append(title)  # Добавление заголовка
+
+    note["content"] = input("Введите описание заметки: ")
+
+    # Запрос статуса заметки с проверкой на корректный ввод
+    while True:
+        status = input("Введите статус заметки (новая, в процессе, выполнено): ").strip().lower()
+        if status in ["новая", "в процессе", "выполнено"]:
+            note["status"] = status
             break
         else:
-            title.append(word)
-    return title
+            print("Некорректный статус. Пожалуйста, введите 'новая', 'в процессе' или 'выполнено'.")
+
+    # Автоматическое добавление текущей даты в поле created_date
+    note["created_date"] = datetime.now().strftime("%d-%m-%Y")
+
+    # Проверка корректного ввода даты истечения заметки
+    note["issue_date"] = input_date("Введите дату истечения заметки в формате 'ДД-ММ-ГГГГ': ")
+    return note
 
 
-def input_date(key):  # checking the date entry
-    format = "%d-%m-%Y"
-    while True:
-        created_date = input(comment(note, key) + ': ')
-        try:
-            bool(dt.strptime(created_date, format))
-            return created_date
-        except ValueError:
-            print("Неправильный формат даты (ДД-ММ-ГГГ), попробуйте еще раз: ")
+# Основная функция для запуска программы
+def main():
+    print("Добро пожаловать в 'Менеджер заметок'!\n")
+    notes.append(create_note())  # Вызов функции для создания заметки
+    print("Заметка создана:\n", notes)
 
 
-def input_today():  # checking the date entry
-    format = "%d-%m-%Y"
-    return dt.now().strftime(format)
+# Запуск основной функции
 
-
-def create_note():  # Creating a note
-    while True:
-        name = input('Введите ' + comment(note, "username") + ': ')
-        notes[len(notes)-1]['username']['var'].clear()
-        notes[len(notes)-1]['username']['var'].append(name)
-        title = input_title()
-        notes[len(notes)-1]['title']['var'] = title
-        content = input('Введите ' + comment(note, "content") + ': ')
-        notes[len(notes)-1]['content']['var'].clear()
-        notes[len(notes)-1]['content']['var'].append(content)
-        status = input_status()
-        notes[len(notes)-1]['status']['var'].clear()
-        notes[len(notes)-1]['status']['var'].append(status)
-        notes[len(notes)-1]['created_date']['var'].clear()
-        notes[len(notes)-1]['created_date']['var'].append(input_today())
-        create = input_date('issue_date')
-        notes[len(notes)-1]['issue_date']['var'].clear()
-        notes[len(notes)-1]['issue_date']['var'].append(create)
-        break
-    return notes[len(notes)-1]
-
-
-# work
-notes.append(deepcopy(note))
-print(create_note())
+if __name__ == "__main__":
+    # Список для хранения всех заметок
+    notes = []
+    main()

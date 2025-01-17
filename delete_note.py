@@ -1,143 +1,106 @@
-from copy import deepcopy
-# vars
-notes = []
-note = {
-        'delete': {
-                    "var": "",
-                    "comment": "Выберите: удалить, создать заметку или выйти",
-                    "check": ["удалить", "создать", "выйти"],
-                    "check_del": ["все заметки", "по заголовку", "по имени"]
-                    },
-        'username': {
-                    "var": ["Влад"],
-                    "comment": 'Имя пользователя',
-                    "check": ["all"]
-                    },
-        'title': {
-                    "var": ["первый", "второй"],
-                    "comment": ["Заголовок заметки"],
-                    "check": ["all"]
-                    },
-        'content': {
-                    "var": "Тестовая заметка",
-                    "comment": "Описание заметки",
-                    "check": ["all"]
-                    },
-        'status': {
-                    "var": "Статус",
-                    "comment": ["Статус заметки"],
-                    "check": ["в процессе", "выполнено", "отложено"]
-                    },
-        'created_date': {
-                        "var": "01-02-2022",
-                        "comment": ["Дата создания заметки(ДД-ММ-ГГГГ)"],
-                        "check": ["all"]
-                        },
-        'issue_date': {
-                        "var": "01-02-2024",
-                        "comment": ["Дата истечения заметки(ДД-ММ-ГГГГ)"],
-                        "check": ["all"]
-                        }
-        }
-
-# defs
-
-
-def is_notes():  # does the note exist
-    if len(notes) >= 1 and notes[0]['username']['var'] != "":
-        return 1
-
-
-def check_key(my_dict, key, var, words):  # does the word exist
-    for word in my_dict[key][var]:
-        if word in words:
-            return 1
-
-
-def comment(my_dict, var):  # returns the comment of the note
-    return my_dict[var]['comment']
-
-
-def del_by(key, del_word):  # deleting a note by parameter
-    for i, del_note in enumerate(notes):
-        for position, del_title in enumerate(notes[i][key]['var']):
-            if del_word == del_title:
-                del notes[i]
-                print('\nЗаметка удалена')
-                if len(notes) == 0:
-                    # if there are no notes, create
-                    notes.append(deepcopy(note))
-
-
-def check_exit():  # checking the correct input(exit)
-    word = input(comment(note, "delete") + ": ")
-    if check_key(notes[len(notes)-1], "delete", "check", word):
-        return word
-    else:
-        print(f'"{word}" является недопустимым словом. Выберите из: \n')
-        print(*notes[len(notes)-1]["delete"]['check'], sep="\n")
-        return ""
-
-
-def del_note():  # deleting notes
+from display_notes_function import display_notes
+# Функция для проверки ввода "да" или "нет"
+def confirm(prompt):
     while True:
-        print(print_notes())
-        print("Напишите, что удалять: ", end="")
-        print(*note['delete']['check_del'], sep=", ", end=": ")
-        word = input()
-        if check_key(notes[len(notes)-1], "delete", "check_del", word):
-            if word == "все заметки":
-                notes.clear()
-                notes.append(deepcopy(note))
-            elif word == "по заголовку":
-                del_by('title', input("Введите заголовок: "))
-            elif word == "по имени":
-                del_by('username', input("Введите имя: "))
-            break
+        response = input(prompt).strip().lower()
+        if response == 'да':
+            return True
+        elif response == 'нет' or response == '':
+            return False
         else:
-            print(f'"{word}" является недопустимым словом. Выберите из: \n')
-            print(*notes[len(notes)-1]["delete"]['check_del'], sep="\n")
+            print("Некорректный ввод. Пожалуйста, введите 'да' или 'нет'.")
 
 
-def print_notes():  # summary of the notes
-    result = ""
-    for note in notes:
-        result = "\nЗаметки: \n"
-        result = result + "\nИмя: " + note['username']['var'][0] + "\n"
-        result = result + "Заголовки: "
-        i = 1
-        for titles in note['title']['var']:
-            result = result + str(i) + ") " + titles + " "
-        result = result + "\nОписание: "
-        result = result + note['content']['var'] + "\n"
-        return result
+# Функция для удаления заметок
+def delete_notes(notes):
+    while True:  # Цикл для повторного запроса выбора критерия
+        print("Выберите критерий для удаления заметок:")
+        print("1. По имени пользователя")
+        print("2. По заголовку заметки")
 
+        criterion = input("Введите номер пункта (1 или 2): ").strip()
+        if criterion not in ['1', '2']:
+            print("Некорректный ввод. Пожалуйста, введите '1' или '2'.")
+            continue  # Запросить ввод снова, если введено некорректно
 
-def show_print():  # information about notes
-    if is_notes():
-        print(print_notes())
-    else:
-        print("Нет ни одной заметки\n")
-        # if there are no notes, create
-        notes.append(deepcopy(note))
+        if criterion == '1':
+            value = input("Введите имя пользователя для \
+удаления заметок: ").strip()
+        elif criterion == '2':
+            value = input("Введите заголовок заметки для удаления: ").strip()
 
+        if not value:
+            print("Вы не ввели значение. Пожалуйста, попробуйте снова.")
+            continue  # Запросить ввод снова, если значение пустое
 
-def work(need_break):  # The main code
-    show_print()
-    while need_break == "да":
-        exit_word = check_exit()
-        if (exit_word) == "выйти":
-            show_print()
-            break
-        elif (exit_word) == "удалить":
-            del_note()
+        initial_count = len(notes)
+
+        # Удаляем заметки по критерию
+        if criterion == '1':
+            # Нечувствительное к регистру сравнение для имени пользователя
+            notes[:] = [
+                note for note in notes
+                if note['username'].lower() != value.lower()
+            ]
+        elif criterion == '2':
+            # Нечувствительное к регистру сравнение для заголовков
+            notes[:] = [
+                note for note in notes
+                if value.lower() not in [
+                    title.lower() for title in note['titles']
+                ]
+            ]
+
+        # Проверка, были ли удалены заметки
+        if len(notes) < initial_count:
+            print(f"Заметки с именем пользователя '{value}' успешно \
+удалены." if criterion == '1' else f"Заметки \
+с заголовком '{value}' успешно удалены.")
         else:
-            pass
-        show_print()
+            print(f"Заметки с именем пользователя '{value}' не \
+найдены." if criterion == '1' else f"Заметки с \
+заголовком '{value}' не найдены.")
+
+        # Вывод оставшихся заметок
+        if initial_count - len(notes) > 0:
+            print("\nВот текущий список ваших заметок:")
+            display_notes(notes)
+        break
+    return notes
 
 
-# works
-print('Добро пожаловать в "Менеджер заметок"! \n')
-need_break = "да"
-work(need_break)
-print("\n")
+# Основная функция для запуска программы
+def main():
+    print("Добро пожаловать в 'Менеджер заметок'!")
+    print("\nСписок заметок:")
+
+    display_notes(notes)  # Вывод всех заметок после завершения ввода
+
+    while confirm("\nХотите удалить заметки? (да/нет): "):
+        if len(notes) > 0:
+            delete_notes(notes)  # Вызов функции для удаления заметок
+        else:
+            print("Нет заметок для удаления")
+
+
+# Запуск основной функции
+if __name__ == "__main__":
+    notes = [
+        {
+            'username': 'Вася',
+            'titles': ['Список покупок'],
+            'content': 'Купить продукты на неделю',
+            'status': 'в процессе',
+            'created_date': '12-01-2025',
+            'issue_date': '13-02-2025'
+        },
+        {
+            'username': 'Иван',
+            'titles': ['Учеба', 'Спорт'],
+            'content': 'Подготовиться к экзамену',
+            'status': 'отложено',
+            'created_date': '01-01-2025',
+            'issue_date': '25-06-2025'
+        }
+    ]
+    main()

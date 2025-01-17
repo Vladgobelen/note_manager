@@ -1,53 +1,86 @@
-# vars
-note = {
-        'username': {
-                    "var": [],
-                    "comment": ['Имя пользователя']
-                    },
-        'title1': {
-                    "var": [],
-                    "comment": ["Заголовок заметки"]
-                    },
-        'content': {
-                    "var": [],
-                    "comment": ["Описание заметки"]
-                    },
-        'status': {
-                    "var": [],
-                    "comment": ["Статус заметки"]
-                    },
-        'created_date': {
-                        "var": [],
-                        "comment": ["Дата создания заметки(ДД-ММ-ГГГГ)"]
-                        },
-        'issue_date': {
-                        "var": [],
-                        "comment": ["Дата истечения заметки(ДД-ММ-ГГГГ)"]
-                        }
-        }
-# working
-print("Введите следущие данные(для завершения введите пустую строку): \n")
-for key in note:
+# Создали словарь для хранения данных заметки
+note = {}
+
+# Запрашиваем у пользователя информацию
+note["username"] = input("Введите имя пользователя: ")
+
+# Создаем список заголовков заметки
+note["titles"] = []
+
+# Используем цикл для добавления заголовков
+print("Введите заголовки заметок (оставьте пустым для завершения):")
+while True:
+    title = input("Введите заголовок заметки: ")
+    if title == "":  # Проверяем на пустой ввод для завершения
+        break
+    if title in note["titles"]:  # Проверяем на уникальность заголовка
+        print("Этот заголовок уже существует. \
+Пожалуйста, введите уникальный заголовок.")
+    else:
+        note["titles"].append(title)  # Добавляем заголовок в список
+
+note["content"] = input("Введите описание заметки: ")
+note["status"] = "Не определено"
+
+
+# Запрашиваем у пользователя текущий статус заметки
+# Функция для отображения списка доступных статусов
+def display_status_options():
+    print("\nВыберите текущий статус заметки:")
+    print("1. Выполнено")
+    print("2. В процессе")
+    print("3. Отложено")
+
+
+# Функция для обновления статуса
+def update_note_status():
+    valid_statuses = {
+        "1": "выполнено",
+        "2": "в процессе",
+        "3": "отложено"
+    }
+
     while True:
-        temp_text = input(f'{note[key]['comment'][0]}: ')
-        if temp_text == "":
-            note[key]['var'] = list(set(note[key]['var']))
-            note[key]['var'].sort()
+        display_status_options()
+        choice = input("Введите номер статуса либо нажмите Ввод \
+чтобы оставить прежний статус: ")
+
+        # Проверяем корректность ввода
+        if choice in valid_statuses:
+            note["status"] = valid_statuses[choice]
+            print("Статус заметки успешно обновлён на:", note["status"])
+            break
+        elif choice == "":
             break
         else:
-            note[key]['var'].append(temp_text)
+            print("Некорректный ввод. Пожалуйста, выберите номер из \
+предложенных вариантов.")
 
-print("\n")
-for key in note:
-    for var in note[key]["var"]:
-        if key == "created_date" or key == "issue_date":
-            value = "-".join(var.split(sep="-")[:2])
-            try:
-                print(f'{note[key]["comment"][0]}: ', value)
-            except Exception as e:
-                print(e)
-        else:
-            try:
-                print(f'{note[key]["comment"][0]}: ', var)
-            except Exception as e:
-                print(e)
+
+# Вызываем функцию для обновления статуса
+update_note_status()
+
+# Вводим даты
+note["created_date"] = input("Введите дату создания заметки \
+в формате 'ДД-ММ-ГГГГ': ")
+note["issue_date"] = input("Введите дату истечения заметки \
+в формате 'ДД-ММ-ГГГГ': ")
+
+
+# Выводим все данные
+print("\nВы ввели следующие данные:")
+print("Имя пользователя:", note["username"])
+
+# Выводим список заголовков заметки
+print("Заголовки заметки:")
+for i, title in enumerate(note["titles"], start=1):
+    print(f'- Заголовок заметки номер {i}: {title}')
+
+print("Описание заметки:", note["content"])
+print("Статус заметки:", note["status"])
+
+# Выводим дату без года.
+print('Дата создания заметки:',
+      "-".join(note['created_date'].split(sep="-")[:2]))
+print('Дата истечения заметки:',
+      "-".join(note['issue_date'].split(sep="-")[:2]))
