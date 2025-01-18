@@ -19,7 +19,8 @@ def choice_note(notes):
     check_size = len(notes)
     while True:
         try:
-            my_note = int(input("Введите номер заметки, которую нужно изменить: "))
+            my_note = input("Введите номер заметки, которую нужно изменить: ")
+            my_note = int(my_note)
             if 1 <= my_note <= check_size:
                 return my_note - 1  # Возвращаем индекс (нумерация с 0)
             else:
