@@ -1,4 +1,3 @@
-from display_notes_function import display_notes
 # Функция для проверки ввода "да" или "нет"
 def confirm(prompt):
     while True:
@@ -56,17 +55,11 @@ def delete_notes(notes):
             print(f"Заметки с именем пользователя '{value}' успешно \
 удалены." if criterion == '1' else f"Заметки \
 с заголовком '{value}' успешно удалены.")
+            break
         else:
             print(f"Заметки с именем пользователя '{value}' не \
 найдены." if criterion == '1' else f"Заметки с \
 заголовком '{value}' не найдены.")
-
-        # Вывод оставшихся заметок
-        if initial_count - len(notes) > 0:
-            print("\nВот текущий список ваших заметок:")
-            display_notes(notes)
-        break
-    return notes
 
 
 # Основная функция для запуска программы

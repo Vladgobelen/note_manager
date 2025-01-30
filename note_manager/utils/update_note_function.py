@@ -1,8 +1,3 @@
-# Импортируем необходимые модули для работы с датами
-from create_note_function import input_date
-# Пример заметки
-
-
 # Функция обновления заметки
 def update_note(note):
 
@@ -55,7 +50,7 @@ def update_note(note):
                 note[field] = new_value  # Обновление значения
 
         print("Заметка успешно обновлена!")
-        return note  # Возврат обновленного словаря заметки
+        break
 
 
 # Пример использования функции

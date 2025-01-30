@@ -1,11 +1,7 @@
 # Импортируем необходимые модули
 from colorama import Fore, Style, init
-from create_note_function import create_note
-from update_note_function import update_note
-from display_notes_function import display_notes
-from delete_note import delete_notes
-from search_notes_function import choice_search
-
+from ..utils import *
+from .display_notes_function import *
 # Инициализация colorama для работы с цветным текстом в консоли
 init(autoreset=True)
 
@@ -97,26 +93,31 @@ def menu(notes):
         # Обработка выбора пользователя
         if choice == '1':
             handle_create_note(notes)
+            break
         elif choice == '2':
             display_notes(notes)
+            break
         elif choice == '3':
             handle_update_note(notes)
+            break
         elif choice == '4':
             notes = handle_delete_note(notes)
+            break
         elif choice == '5':
             handle_search_note(notes)
+            break
         elif choice == '6':
             print(Fore.GREEN + "Программа завершена. Спасибо за использование!" + Style.RESET_ALL)
             break
         else:
             print(Fore.RED + "Неверный выбор. Пожалуйста, выберите действие из списка." + Style.RESET_ALL)
+    return choice
 
 
 def main():
     """
     Основная функция для запуска программы.
     """
-    print(Fore.CYAN + "Добро пожаловать в 'Менеджер заметок'!" + Style.RESET_ALL)
     notes = []  # Инициализация списка заметок
     menu(notes)  # Запуск меню
 
